@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Waterfront Properties Company Directory - Login</title>
+    <meta name="robots" content="noindex, nofollow" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            background-color: #FFFFFF;
+            padding: 30px;
+            font-family: Arial, sans-serif;
+            margin: 0;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .logo {
+            width: 50px;
+            height: 46px;
+        }
+        .error {
+            color: #e74c3c;
+            margin: 20px 0;
+            padding: 10px;
+            background-color: #fdf2f2;
+            border: 1px solid #e74c3c;
+            border-radius: 4px;
+            display: none;
+        }
+        .form-group {
+            margin: 20px 0;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input[type="password"] {
+            padding: 10px;
+            width: 200px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        .button {
+            padding: 10px 20px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+        .button:hover {
+            background-color: #2980b9;
+        }
+        .header-table {
+            width: 100%;
+            max-width: 626px;
+            margin: 0 auto 30px auto;
+        }
+        .header-table td {
+            vertical-align: middle;
+        }
+        h2 {
+            margin: 0;
+            color: #2c3e50;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <table class="header-table" border="0">
+            <tbody>
+                <tr>
+                    <td width="55" style="text-align: center;">
+                        <img src="/assets/wflogo.jpg" class="logo" alt="Waterfront Logo" />
+                    </td>
+                    <td width="494" style="text-align: center;">
+                        <h2>Waterfront Properties Company Directory</h2>
+                    </td>
+                    <td width="55" style="text-align: center;">
+                        <img src="/assets/wflogo2.jpg" class="logo" alt="Waterfront Logo" />
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <p>Please enter the password to view the company directory.</p>
+
+        <div id="errorPanel" class="error">
+            Access denied! Incorrect password.
+        </div>
+
+        <form method="POST" action="/login">
+            <div class="form-group">
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" required autocomplete="current-password">
+            </div>
+            
+            <button type="submit" class="button">View Directory</button>
+        </form>
+    </div>
+
+    <script src="/assets/login.js"></script>
+</body>
+</html> 

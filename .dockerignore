@@ -1,0 +1,24 @@
+node_modules
+npm-debug.log
+.git
+.gitignore
+README.md
+Dockerfile
+.dockerignore
+coverage
+.nyc_output
+.env
+.env.example
+convert-directory.js
+
+# Original ASP.NET files (not needed in container)
+*.aspx
+*.aspx.cs
+*.asax
+Web.config
+Global.zip
+
+# Build artifacts
+*.log
+.DS_Store
+Thumbs.db 
