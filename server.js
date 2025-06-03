@@ -26,6 +26,8 @@ app.use(session({
   saveUninitialized: false,
   cookie: { 
     secure: config.nodeEnv === 'production',
+    httpOnly: true,
+    path: '/',
     maxAge: 30 * 60 * 1000 // 30 minutes
   }
 }));
