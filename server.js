@@ -1,23 +1,28 @@
 const express = require('express');
 const session = require('express-session');
-const helmet = require('helmet');
 const path = require('path');
 const config = require('./config');
 
 const app = express();
 
-// Security middleware
-app.use(helmet({
-  contentSecurityPolicy: {
-    directives: {
-      defaultSrc: ["'self'"],
-      styleSrc: ["'self'", "'unsafe-inline'"],
-      imgSrc: ["'self'", "http://www.wfpccvideo.com", "https://cdn.jsdelivr.net", "data:"],
-      scriptSrc: ["'self'"],
-      connectSrc: ["'self'"]
-    }
-  }
-}));
+// Basic security headers (without helmet to avoid IP-based access issues)
+app.use((req, res, next) => {
+  // Only set essential security headers that don't interfere with IP access
+  res.setHeader('X-Content-Type-Options', 'nosniff');
+  res.setHeader('X-Frame-Options', 'DENY');
+  res.setHeader('X-XSS-Protection', '1; mode=block');
+  
+  // CSP that allows the necessary resources
+  res.setHeader('Content-Security-Policy', 
+    "default-src 'self'; " +
+    "style-src 'self' 'unsafe-inline'; " +
+    "img-src 'self' http://www.wfpccvideo.com https://cdn.jsdelivr.net data:; " +
+    "script-src 'self'; " +
+    "connect-src 'self'"
+  );
+  
+  next();
+});
 
 // Session middleware
 app.use(session({
@@ -25,10 +30,11 @@ app.use(session({
   resave: false,
   saveUninitialized: false,
   cookie: { 
-    secure: config.nodeEnv === 'production',
+    secure: false, // Always false for HTTP access, regardless of NODE_ENV
     httpOnly: true,
     path: '/',
-    maxAge: 30 * 60 * 1000 // 30 minutes
+    maxAge: 30 * 60 * 1000, // 30 minutes
+    sameSite: 'lax' // Allow cross-site requests for better remote access
   }
 }));
 
@@ -66,12 +72,20 @@ app.get('/login', (req, res) => {
 });
 
 app.post('/login', (req, res) => {
+  console.log('Login attempt received');
+  console.log('Request body:', req.body);
+  console.log('Password provided:', req.body.password);
+  console.log('Expected password:', config.directoryPassword);
+  
   const { password } = req.body;
   
   if (password === config.directoryPassword) {
+    console.log('Password correct, setting session');
     req.session.authenticated = true;
+    console.log('Session after setting:', req.session);
     res.redirect('/directory');
   } else {
+    console.log('Password incorrect, redirecting to login with error');
     res.redirect('/login?error=1');
   }
 });
