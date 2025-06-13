@@ -17,21 +17,21 @@ pool.connect((err, client, release) => {
 async function getDirectoryData() {
   try {
     const [agents, affiliated, yacht, teams, offices, fax] = await Promise.all([
-      pool.query('SELECT * FROM directory_agents ORDER BY full_name'),
-      pool.query('SELECT * FROM directory_affiliated_businesses ORDER BY full_name'),
-      pool.query('SELECT * FROM directory_yacht_brokerage ORDER BY full_name'),
-      pool.query('SELECT * FROM directory_teams ORDER BY team_name'),
-      pool.query('SELECT * FROM directory_offices ORDER BY office_name'),
-      pool.query('SELECT * FROM directory_fax_to_emails ORDER BY destination')
+      pool.query('SELECT * FROM microservices.directory_agents ORDER BY full_name'),
+      pool.query('SELECT * FROM microservices.directory_affiliated_businesses ORDER BY full_name'),
+      pool.query('SELECT * FROM microservices.directory_yacht_brokerage ORDER BY full_name'),
+      pool.query('SELECT * FROM microservices.directory_teams ORDER BY team_name'),
+      pool.query('SELECT * FROM microservices.directory_offices ORDER BY office_name'),
+      pool.query('SELECT * FROM microservices.directory_fax_to_emails ORDER BY destination')
     ]);
 
     return {
       agents: agents.rows,
-      affiliated: affiliated.rows,
-      yacht: yacht.rows,
+      affiliatedBusinesses: affiliated.rows,
+      yachtBrokerage: yacht.rows,
       teams: teams.rows,
       offices: offices.rows,
-      fax: fax.rows
+      faxToEmails: fax.rows
     };
   } catch (error) {
     console.error('Error fetching directory data:', error);
@@ -42,12 +42,12 @@ async function getDirectoryData() {
 // Get a single item by type and id
 async function getItem(type, id) {
   const tableMap = {
-    agents: 'directory_agents',
-    affiliated: 'directory_affiliated_businesses',
-    yacht: 'directory_yacht_brokerage',
-    teams: 'directory_teams',
-    offices: 'directory_offices',
-    fax: 'directory_fax_to_emails'
+    agents: 'microservices.directory_agents',
+    affiliated: 'microservices.directory_affiliated_businesses',
+    yacht: 'microservices.directory_yacht_brokerage',
+    teams: 'microservices.directory_teams',
+    offices: 'microservices.directory_offices',
+    fax: 'microservices.directory_fax_to_emails'
   };
 
   try {
@@ -71,12 +71,12 @@ async function getItem(type, id) {
 // Create a new item
 async function createItem(type, data) {
   const tableMap = {
-    agents: 'directory_agents',
-    affiliated: 'directory_affiliated_businesses',
-    yacht: 'directory_yacht_brokerage',
-    teams: 'directory_teams',
-    offices: 'directory_offices',
-    fax: 'directory_fax_to_emails'
+    agents: 'microservices.directory_agents',
+    affiliated: 'microservices.directory_affiliated_businesses',
+    yacht: 'microservices.directory_yacht_brokerage',
+    teams: 'microservices.directory_teams',
+    offices: 'microservices.directory_offices',
+    fax: 'microservices.directory_fax_to_emails'
   };
 
   try {
@@ -106,12 +106,12 @@ async function createItem(type, data) {
 // Update an existing item
 async function updateItem(type, id, data) {
   const tableMap = {
-    agents: 'directory_agents',
-    affiliated: 'directory_affiliated_businesses',
-    yacht: 'directory_yacht_brokerage',
-    teams: 'directory_teams',
-    offices: 'directory_offices',
-    fax: 'directory_fax_to_emails'
+    agents: 'microservices.directory_agents',
+    affiliated: 'microservices.directory_affiliated_businesses',
+    yacht: 'microservices.directory_yacht_brokerage',
+    teams: 'microservices.directory_teams',
+    offices: 'microservices.directory_offices',
+    fax: 'microservices.directory_fax_to_emails'
   };
 
   try {
@@ -142,12 +142,12 @@ async function updateItem(type, id, data) {
 // Delete an item
 async function deleteItem(type, id) {
   const tableMap = {
-    agents: 'directory_agents',
-    affiliated: 'directory_affiliated_businesses',
-    yacht: 'directory_yacht_brokerage',
-    teams: 'directory_teams',
-    offices: 'directory_offices',
-    fax: 'directory_fax_to_emails'
+    agents: 'microservices.directory_agents',
+    affiliated: 'microservices.directory_affiliated_businesses',
+    yacht: 'microservices.directory_yacht_brokerage',
+    teams: 'microservices.directory_teams',
+    offices: 'microservices.directory_offices',
+    fax: 'microservices.directory_fax_to_emails'
   };
 
   try {
