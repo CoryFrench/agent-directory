@@ -47,6 +47,7 @@ app.use(express.json());
 // Static files (for images and assets)
 app.use('/assets', express.static(path.join(__dirname, 'public')));
 app.use('/js', express.static(path.join(__dirname, 'public/js')));
+app.use('/css', express.static(path.join(__dirname, 'public/css')));
 
 // Authentication middleware for pages (redirects)
 function requireAuth(req, res, next) {

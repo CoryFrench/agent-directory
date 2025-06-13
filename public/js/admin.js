@@ -50,7 +50,12 @@ const formTemplates = {
 // Fetch directory data when the page loads
 async function loadDirectoryData() {
     try {
-        const response = await fetch('/api/directory');
+        const response = await fetch('/api/agent-directory/api/directory', {
+            credentials: 'include',
+            headers: {
+                'X-API-Key': '6ec14ed9-7485-492a-9393-b3df17967945'
+            }
+        });
         if (!response.ok) {
             throw new Error('Failed to fetch directory data');
         }
@@ -85,7 +90,7 @@ function displayDirectoryData(data) {
     `).join('');
 
     // Display Affiliated Businesses
-    document.getElementById('affiliated-grid').innerHTML = data.affiliated.map(business => `
+    document.getElementById('affiliated-grid').innerHTML = data.affiliatedBusinesses.map(business => `
         <div class="card">
             <div class="name">${business.full_name}</div>
             ${business.direct_phone ? `<div class="info">Direct: ${business.direct_phone}</div>` : ''}
@@ -105,7 +110,7 @@ function displayDirectoryData(data) {
     `).join('');
 
     // Display Yacht Brokerage
-    document.getElementById('yacht-grid').innerHTML = data.yacht.map(broker => `
+    document.getElementById('yacht-grid').innerHTML = data.yachtBrokerage.map(broker => `
         <div class="card">
             <div class="name">${broker.full_name}</div>
             ${broker.direct_phone ? `<div class="info">Direct: ${broker.direct_phone}</div>` : ''}
@@ -152,7 +157,7 @@ function displayDirectoryData(data) {
     `).join('');
 
     // Display Fax to Email
-    document.getElementById('fax-grid').innerHTML = data.fax.map(fax => `
+    document.getElementById('fax-grid').innerHTML = data.faxToEmails.map(fax => `
         <div class="card">
             <div class="name">${fax.destination}</div>
             ${fax.fax_number ? `<div class="info">Fax: ${fax.fax_number}</div>` : ''}
@@ -199,7 +204,12 @@ function showAddModal(type) {
 
 async function showEditModal(type, id) {
     try {
-        const response = await fetch(`/api/directory/${type}/${id}`);
+        const response = await fetch(`/api/agent-directory/api/directory/${type}/${id}`, {
+            credentials: 'include',
+            headers: {
+                'X-API-Key': '6ec14ed9-7485-492a-9393-b3df17967945'
+            }
+        });
         if (!response.ok) throw new Error('Failed to fetch item');
         const item = await response.json();
 
@@ -235,13 +245,15 @@ async function saveItem(event) {
     const data = Object.fromEntries(formData.entries());
 
     try {
-        const url = id ? `/api/directory/${type}/${id}` : `/api/directory/${type}`;
+        const url = id ? `/api/agent-directory/api/directory/${type}/${id}` : `/api/agent-directory/api/directory/${type}`;
         const method = id ? 'PUT' : 'POST';
         
         const response = await fetch(url, {
             method,
+            credentials: 'include',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'X-API-Key': '6ec14ed9-7485-492a-9393-b3df17967945'
             },
             body: JSON.stringify(data)
         });
@@ -260,8 +272,12 @@ async function deleteItem(type, id) {
     if (!confirm('Are you sure you want to delete this item?')) return;
 
     try {
-        const response = await fetch(`/api/directory/${type}/${id}`, {
-            method: 'DELETE'
+        const response = await fetch(`/api/agent-directory/api/directory/${type}/${id}`, {
+            method: 'DELETE',
+            credentials: 'include',
+            headers: {
+                'X-API-Key': '6ec14ed9-7485-492a-9393-b3df17967945'
+            }
         });
 
         if (!response.ok) throw new Error('Failed to delete item');
