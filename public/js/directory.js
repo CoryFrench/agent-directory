@@ -126,8 +126,8 @@ function hideAdminModal() {
 async function checkAdminPassword() {
     const password = document.getElementById('adminPassword').value;
     
-    // Use the same password as the main login
-    if (password === 'soldbywaterfront') {
+    // Admin-specific password
+    if (password === 'WaterfrontAdmin25!') {
         hideAdminModal();
         window.location.href = '/admin';
     } else {
