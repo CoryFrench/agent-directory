@@ -80,19 +80,34 @@
         .social a:hover {
             text-decoration: underline;
         }
-        .logout-btn {
+        .header-buttons {
             position: absolute;
             top: 20px;
             right: 20px;
+            display: flex;
+            gap: 10px;
+        }
+        .logout-btn, .back-btn {
             padding: 8px 16px;
-            background-color: #dc3545;
             color: white;
             border: none;
             border-radius: 4px;
             cursor: pointer;
+            text-decoration: none;
+            font-size: 14px;
+            display: inline-block;
+        }
+        .logout-btn {
+            background-color: #dc3545;
         }
         .logout-btn:hover {
             background-color: #c82333;
+        }
+        .back-btn {
+            background-color: #6c757d;
+        }
+        .back-btn:hover {
+            background-color: #545b62;
         }
 
         /* Admin-specific styles */
@@ -193,7 +208,10 @@
             <img src="/assets/wflogo.jpg" alt="Waterfront Properties Logo">
             <h1>Directory Administration</h1>
         </div>
-        <button class="logout-btn" id="logoutBtn">Logout</button>
+        <div class="header-buttons">
+            <a href="/directory" class="back-btn">← Back to Directory</a>
+            <button class="logout-btn" id="logoutBtn">Logout</button>
+        </div>
         
         <!-- Agents Section -->
         <div class="section">

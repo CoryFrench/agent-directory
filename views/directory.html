@@ -25,16 +25,13 @@
             border-bottom: 2px solid #333;
             padding-bottom: 20px;
         }
-        .header-table {
-            width: 100%;
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
             margin-bottom: 20px;
         }
-        .header-table td {
-            text-align: center;
-            vertical-align: middle;
-            padding: 10px;
-        }
-        .header img {
+        .logo-left, .logo-right {
             max-width: 200px;
             height: auto;
         }
@@ -136,6 +133,71 @@
         .email-cell a:hover {
             text-decoration: underline;
         }
+        /* Admin Modal Styles */
+        .admin-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            z-index: 1000;
+        }
+        .admin-modal-content {
+            background-color: white;
+            margin: 15% auto;
+            padding: 30px;
+            width: 300px;
+            border-radius: 8px;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+        .admin-modal-content h3 {
+            margin-top: 0;
+            color: #333;
+        }
+        .admin-modal-content input {
+            width: 100%;
+            padding: 10px;
+            margin: 15px 0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+        .admin-modal-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        .admin-submit-btn, .admin-cancel-btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        .admin-submit-btn {
+            background-color: #007bff;
+            color: white;
+        }
+        .admin-submit-btn:hover {
+            background-color: #0056b3;
+        }
+        .admin-cancel-btn {
+            background-color: #6c757d;
+            color: white;
+        }
+        .admin-cancel-btn:hover {
+            background-color: #545b62;
+        }
+        .admin-error {
+            color: #dc3545;
+            margin-top: 10px;
+            font-size: 14px;
+        }
+        
         @media (max-width: 768px) {
             table {
                 font-size: 12px;
@@ -146,8 +208,15 @@
             .header h1 {
                 font-size: 1.5em;
             }
-            .header img {
+            .logo-left, .logo-right {
                 max-width: 150px;
+            }
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+            }
+            .header-content h1 {
+                margin: 10px 0;
             }
         }
     </style>
@@ -155,17 +224,29 @@
 <body>
     <div class="container">
         <div class="header">
-            <table class="header-table">
-                <tr>
-                    <td><img src="/assets/wflogo.jpg" alt="Waterfront Properties Logo"></td>
-                    <td><h1>Waterfront Properties Company Directory</h1></td>
-                    <td><img src="/assets/wflogo2.jpg" alt="Waterfront Properties Logo"></td>
-                </tr>
-            </table>
+            <div class="header-content">
+                <img src="/assets/wflogo.jpg" alt="Waterfront Properties Logo" class="logo-left">
+                <h1>Waterfront Properties Company Directory</h1>
+                <img src="/assets/wflogo2.jpg" alt="Waterfront Properties Logo" class="logo-right">
+            </div>
         </div>
         <div class="header-buttons">
-            <a href="/admin" class="admin-btn">Admin</a>
+            <button class="admin-btn" id="adminBtn">Admin</button>
             <button class="logout-btn" id="logoutBtn">Logout</button>
+        </div>
+        
+        <!-- Admin Password Modal -->
+        <div id="adminModal" class="admin-modal" style="display: none;">
+            <div class="admin-modal-content">
+                <h3>Admin Access</h3>
+                <p>Enter admin password:</p>
+                <input type="password" id="adminPassword" placeholder="Password">
+                <div class="admin-modal-buttons">
+                    <button id="adminSubmit" class="admin-submit-btn">Enter</button>
+                    <button id="adminCancel" class="admin-cancel-btn">Cancel</button>
+                </div>
+                <div id="adminError" class="admin-error" style="display: none;">Incorrect password</div>
+            </div>
         </div>
         
         <!-- Agents Section -->

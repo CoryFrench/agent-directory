@@ -111,10 +111,55 @@ function logout() {
         .catch(error => console.error('Logout error:', error));
 }
 
+// Admin modal functionality
+function showAdminModal() {
+    document.getElementById('adminModal').style.display = 'block';
+    document.getElementById('adminPassword').focus();
+}
+
+function hideAdminModal() {
+    document.getElementById('adminModal').style.display = 'none';
+    document.getElementById('adminPassword').value = '';
+    document.getElementById('adminError').style.display = 'none';
+}
+
+async function checkAdminPassword() {
+    const password = document.getElementById('adminPassword').value;
+    
+    // Use the same password as the main login
+    if (password === 'soldbywaterfront') {
+        hideAdminModal();
+        window.location.href = '/admin';
+    } else {
+        document.getElementById('adminError').style.display = 'block';
+        document.getElementById('adminPassword').value = '';
+        document.getElementById('adminPassword').focus();
+    }
+}
+
 // Initialize the page
 document.addEventListener('DOMContentLoaded', () => {
     // Add event listener for logout button
     document.getElementById('logoutBtn').addEventListener('click', logout);
+    
+    // Add event listeners for admin modal
+    document.getElementById('adminBtn').addEventListener('click', showAdminModal);
+    document.getElementById('adminCancel').addEventListener('click', hideAdminModal);
+    document.getElementById('adminSubmit').addEventListener('click', checkAdminPassword);
+    
+    // Allow Enter key to submit admin password
+    document.getElementById('adminPassword').addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+            checkAdminPassword();
+        }
+    });
+    
+    // Close modal when clicking outside of it
+    document.getElementById('adminModal').addEventListener('click', (e) => {
+        if (e.target === document.getElementById('adminModal')) {
+            hideAdminModal();
+        }
+    });
 
     // Load initial data
     loadDirectoryData();
