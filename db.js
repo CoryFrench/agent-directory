@@ -17,9 +17,37 @@ pool.connect((err, client, release) => {
 async function getDirectoryData() {
   try {
     const [agents, affiliated, yacht, teams, offices, fax] = await Promise.all([
-      pool.query('SELECT * FROM microservices.directory_agents ORDER BY full_name'),
-      pool.query('SELECT * FROM microservices.directory_affiliated_businesses ORDER BY full_name'),
-      pool.query('SELECT * FROM microservices.directory_yacht_brokerage ORDER BY full_name'),
+      // Join with utils.user_socials to get approved social links
+      pool.query(`
+        SELECT 
+          da.*,
+          us.facebook as approved_facebook,
+          us.linkedin as approved_linkedin,
+          us.goto as approved_goto
+        FROM microservices.directory_agents da
+        LEFT JOIN utils.user_socials us ON da.email = us.email
+        ORDER BY da.full_name
+      `),
+      pool.query(`
+        SELECT 
+          dab.*,
+          us.facebook as approved_facebook,
+          us.linkedin as approved_linkedin,
+          us.goto as approved_goto
+        FROM microservices.directory_affiliated_businesses dab
+        LEFT JOIN utils.user_socials us ON dab.email = us.email
+        ORDER BY dab.full_name
+      `),
+      pool.query(`
+        SELECT 
+          dyb.*,
+          us.facebook as approved_facebook,
+          us.linkedin as approved_linkedin,
+          us.goto as approved_goto
+        FROM microservices.directory_yacht_brokerage dyb
+        LEFT JOIN utils.user_socials us ON dyb.email = us.email
+        ORDER BY dyb.full_name
+      `),
       pool.query('SELECT * FROM microservices.directory_teams ORDER BY team_name'),
       pool.query('SELECT * FROM microservices.directory_offices ORDER BY office_name'),
       pool.query('SELECT * FROM microservices.directory_fax_to_emails ORDER BY destination')

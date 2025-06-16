@@ -78,9 +78,9 @@ function displayDirectoryData(data) {
             ${agent.email ? `<div class="info">Email: <a href="mailto:${agent.email}">${agent.email}</a></div>` : ''}
             ${agent.location ? `<div class="info">Location: ${agent.location}</div>` : ''}
             <div class="social">
-                ${agent.facebook_url ? `<a href="${agent.facebook_url}" target="_blank">Facebook</a>` : ''}
-                ${agent.linkedin_url ? `<a href="${agent.linkedin_url}" target="_blank">LinkedIn</a>` : ''}
-                ${agent.goto_url ? `<a href="${agent.goto_url}" target="_blank">GoTo</a>` : ''}
+                ${agent.approved_facebook ? `<a href="${agent.facebook_url}" target="_blank">Facebook</a>` : ''}
+                ${agent.approved_linkedin ? `<a href="${agent.linkedin_url}" target="_blank">LinkedIn</a>` : ''}
+                ${agent.approved_goto ? `<a href="${agent.goto_url}" target="_blank">GoTo</a>` : ''}
             </div>
             <div class="admin-controls">
                 <button class="edit-btn" data-type="agents" data-id="${agent.id}">Edit</button>
@@ -98,9 +98,9 @@ function displayDirectoryData(data) {
             ${business.email ? `<div class="info">Email: <a href="mailto:${business.email}">${business.email}</a></div>` : ''}
             ${business.location ? `<div class="info">Location: ${business.location}</div>` : ''}
             <div class="social">
-                ${business.facebook_url ? `<a href="${business.facebook_url}" target="_blank">Facebook</a>` : ''}
-                ${business.linkedin_url ? `<a href="${business.linkedin_url}" target="_blank">LinkedIn</a>` : ''}
-                ${business.goto_url ? `<a href="${business.goto_url}" target="_blank">GoTo</a>` : ''}
+                ${business.approved_facebook ? `<a href="${business.facebook_url}" target="_blank">Facebook</a>` : ''}
+                ${business.approved_linkedin ? `<a href="${business.linkedin_url}" target="_blank">LinkedIn</a>` : ''}
+                ${business.approved_goto ? `<a href="${business.goto_url}" target="_blank">GoTo</a>` : ''}
             </div>
             <div class="admin-controls">
                 <button class="edit-btn" data-type="affiliated" data-id="${business.id}">Edit</button>
@@ -118,9 +118,9 @@ function displayDirectoryData(data) {
             ${broker.email ? `<div class="info">Email: <a href="mailto:${broker.email}">${broker.email}</a></div>` : ''}
             ${broker.location ? `<div class="info">Location: ${broker.location}</div>` : ''}
             <div class="social">
-                ${broker.facebook_url ? `<a href="${broker.facebook_url}" target="_blank">Facebook</a>` : ''}
-                ${broker.linkedin_url ? `<a href="${broker.linkedin_url}" target="_blank">LinkedIn</a>` : ''}
-                ${broker.goto_url ? `<a href="${broker.goto_url}" target="_blank">GoTo</a>` : ''}
+                ${broker.approved_facebook ? `<a href="${broker.facebook_url}" target="_blank">Facebook</a>` : ''}
+                ${broker.approved_linkedin ? `<a href="${broker.linkedin_url}" target="_blank">LinkedIn</a>` : ''}
+                ${broker.approved_goto ? `<a href="${broker.goto_url}" target="_blank">GoTo</a>` : ''}
             </div>
             <div class="admin-controls">
                 <button class="edit-btn" data-type="yacht" data-id="${broker.id}">Edit</button>
