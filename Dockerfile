@@ -1,6 +1,9 @@
 # Use Node.js 18 Alpine for minimal size
 FROM node:18-alpine
 
+# Install curl for health checks
+RUN apk add --no-cache curl
+
 # Set working directory
 WORKDIR /app
 
@@ -31,7 +34,7 @@ EXPOSE 14100
 
 # Health check
 HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
-  CMD node -e "require('http').get('http://localhost:14100/health', (res) => { process.exit(res.statusCode === 200 ? 0 : 1) })"
+  CMD curl -f http://localhost:14100/health || exit 1
 
 # Start the application
 CMD ["npm", "start"] 
