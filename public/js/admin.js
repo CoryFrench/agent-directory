@@ -5,30 +5,21 @@ const formTemplates = {
         { name: 'direct_phone', label: 'Direct Phone', type: 'tel' },
         { name: 'cell_phone', label: 'Cell Phone', type: 'tel' },
         { name: 'email', label: 'Email', type: 'email' },
-        { name: 'location', label: 'Location', type: 'text' },
-        { name: 'facebook_url', label: 'Facebook URL', type: 'url' },
-        { name: 'linkedin_url', label: 'LinkedIn URL', type: 'url' },
-        { name: 'goto_url', label: 'GoTo URL', type: 'url' }
+        { name: 'location', label: 'Location', type: 'text' }
     ],
     affiliated: [
         { name: 'full_name', label: 'Business Name', type: 'text', required: true },
         { name: 'direct_phone', label: 'Direct Phone', type: 'tel' },
         { name: 'cell_phone', label: 'Cell Phone', type: 'tel' },
         { name: 'email', label: 'Email', type: 'email' },
-        { name: 'location', label: 'Location', type: 'text' },
-        { name: 'facebook_url', label: 'Facebook URL', type: 'url' },
-        { name: 'linkedin_url', label: 'LinkedIn URL', type: 'url' },
-        { name: 'goto_url', label: 'GoTo URL', type: 'url' }
+        { name: 'location', label: 'Location', type: 'text' }
     ],
     yacht: [
         { name: 'full_name', label: 'Full Name', type: 'text', required: true },
         { name: 'direct_phone', label: 'Direct Phone', type: 'tel' },
         { name: 'cell_phone', label: 'Cell Phone', type: 'tel' },
         { name: 'email', label: 'Email', type: 'email' },
-        { name: 'location', label: 'Location', type: 'text' },
-        { name: 'facebook_url', label: 'Facebook URL', type: 'url' },
-        { name: 'linkedin_url', label: 'LinkedIn URL', type: 'url' },
-        { name: 'goto_url', label: 'GoTo URL', type: 'url' }
+        { name: 'location', label: 'Location', type: 'text' }
     ],
     teams: [
         { name: 'team_name', label: 'Team Name', type: 'text', required: true },
