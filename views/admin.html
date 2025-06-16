@@ -177,6 +177,22 @@
             width: 80%;
             max-width: 600px;
             border-radius: 8px;
+            position: relative;
+        }
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            cursor: pointer;
+        }
+        .close:hover,
+        .close:focus {
+            color: #000;
+            text-decoration: none;
         }
         .form-group {
             margin-bottom: 15px;
@@ -284,6 +300,7 @@
     <!-- Modal for adding/editing items -->
     <div id="editModal" class="modal">
         <div class="modal-content">
+            <span class="close">&times;</span>
             <h2 id="modalTitle">Add New Item</h2>
             <form id="editForm">
                 <input type="hidden" id="itemId">
@@ -300,6 +317,6 @@
         </div>
     </div>
 
-    <script src="/js/admin.js?v=20250616-1"></script>
+    <script src="/js/admin.js?v=20250616-2"></script>
 </body>
 </html> 
