@@ -134,8 +134,8 @@ function showAddModal(type) {
     document.getElementById('itemId').value = '';
     document.getElementById('itemType').value = type;
     
-    const form = document.getElementById('itemForm');
-    form.innerHTML = '';
+    const formFields = document.getElementById('formFields');
+    formFields.innerHTML = '';
     
     formTemplates[type].forEach(field => {
         const div = document.createElement('div');
@@ -144,10 +144,10 @@ function showAddModal(type) {
             <label for="${field.name}">${field.label}${field.required ? ' *' : ''}:</label>
             <input type="${field.type}" id="${field.name}" name="${field.name}" ${field.required ? 'required' : ''}>
         `;
-        form.appendChild(div);
+        formFields.appendChild(div);
     });
     
-    document.getElementById('modal').style.display = 'block';
+    document.getElementById('editModal').style.display = 'block';
 }
 
 async function showEditModal(type, id) {
@@ -165,8 +165,8 @@ async function showEditModal(type, id) {
         document.getElementById('itemId').value = id;
         document.getElementById('itemType').value = type;
         
-        const form = document.getElementById('itemForm');
-        form.innerHTML = '';
+        const formFields = document.getElementById('formFields');
+        formFields.innerHTML = '';
         
         formTemplates[type].forEach(field => {
             const div = document.createElement('div');
@@ -175,10 +175,10 @@ async function showEditModal(type, id) {
                 <label for="${field.name}">${field.label}${field.required ? ' *' : ''}:</label>
                 <input type="${field.type}" id="${field.name}" name="${field.name}" value="${item[field.name] || ''}" ${field.required ? 'required' : ''}>
             `;
-            form.appendChild(div);
+            formFields.appendChild(div);
         });
         
-        document.getElementById('modal').style.display = 'block';
+        document.getElementById('editModal').style.display = 'block';
     } catch (error) {
         console.error('Error fetching item:', error);
         alert('Error loading item for editing');
@@ -186,7 +186,7 @@ async function showEditModal(type, id) {
 }
 
 function hideModal() {
-    document.getElementById('modal').style.display = 'none';
+    document.getElementById('editModal').style.display = 'none';
 }
 
 async function saveItem(event) {
@@ -267,13 +267,15 @@ document.addEventListener('DOMContentLoaded', function() {
     });
     
     // Modal event listeners
-    document.getElementById('itemForm').addEventListener('submit', saveItem);
-    document.querySelector('.close').addEventListener('click', hideModal);
+    document.getElementById('editForm').addEventListener('submit', saveItem);
     document.getElementById('cancelBtn').addEventListener('click', hideModal);
+    
+    // Add logout button listener
+    document.getElementById('logoutBtn').addEventListener('click', logout);
     
     // Close modal when clicking outside
     window.addEventListener('click', (event) => {
-        const modal = document.getElementById('modal');
+        const modal = document.getElementById('editModal');
         if (event.target === modal) {
             hideModal();
         }
