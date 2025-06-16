@@ -32,8 +32,8 @@ const formTemplates = {
     ],
     teams: [
         { name: 'team_name', label: 'Team Name', type: 'text', required: true },
-        { name: 'team_email', label: 'Team Email', type: 'email' },
-        { name: 'team_phone', label: 'Team Phone', type: 'tel' }
+        { name: 'team_phone', label: 'Team Phone', type: 'tel' },
+        { name: 'team_email', label: 'Team Email', type: 'email' }
     ],
     offices: [
         { name: 'office_name', label: 'Office Name', type: 'text', required: true },
@@ -47,141 +47,93 @@ const formTemplates = {
     ]
 };
 
-// Fetch directory data when the page loads
+// Load all directory data
 async function loadDirectoryData() {
     try {
-        const response = await fetch('/api/agent-directory/api/directory', {
-            credentials: 'include',
-            headers: {
-                'X-API-Key': '6ec14ed9-7485-492a-9393-b3df17967945'
-            }
+        const response = await fetch('/api/directory', {
+            method: 'GET',
+            credentials: 'same-origin'
         });
+        
         if (!response.ok) {
-            throw new Error('Failed to fetch directory data');
+            throw new Error(`HTTP error! status: ${response.status}`);
         }
+        
         const data = await response.json();
-        displayDirectoryData(data);
+        
+        // Populate each section
+        populateSection('agents', data.agents || []);
+        populateSection('affiliated', data.affiliatedBusinesses || []);
+        populateSection('yacht', data.yachtBrokerage || []);
+        populateSection('teams', data.teams || []);
+        populateSection('offices', data.offices || []);
+        populateSection('fax', data.faxToEmails || []);
+        
     } catch (error) {
         console.error('Error loading directory data:', error);
-        document.querySelector('.container').innerHTML = 
-            '<p style="color: red;">Error loading directory data. Please try again later.</p>';
+        alert('Error loading directory data. Please try again.');
     }
 }
 
-function displayDirectoryData(data) {
-    // Display Agents
-    document.getElementById('agents-grid').innerHTML = data.agents.map(agent => `
-        <div class="card">
-            <div class="name">${agent.full_name}</div>
-            ${agent.direct_phone ? `<div class="info">Direct: ${agent.direct_phone}</div>` : ''}
-            ${agent.cell_phone ? `<div class="info">Cell: ${agent.cell_phone}</div>` : ''}
-            ${agent.email ? `<div class="info">Email: <a href="mailto:${agent.email}">${agent.email}</a></div>` : ''}
-            ${agent.location ? `<div class="info">Location: ${agent.location}</div>` : ''}
-            <div class="social">
-                ${agent.approved_facebook ? `<a href="${agent.facebook_url}" target="_blank" class="facebook" title="Facebook"><i class="fab fa-facebook"></i></a>` : ''}
-                ${agent.approved_linkedin ? `<a href="${agent.linkedin_url}" target="_blank" class="linkedin" title="LinkedIn"><i class="fab fa-linkedin"></i></a>` : ''}
-                ${agent.approved_goto ? `<a href="${agent.goto_url}" target="_blank" class="goto" title="GoTo"><i class="fas fa-external-link-alt"></i></a>` : ''}
-            </div>
+function populateSection(type, items) {
+    const gridElement = document.getElementById(`${type}-grid`);
+    if (!gridElement) return;
+    
+    gridElement.innerHTML = items.map(item => {
+        let html = '<div class="card">';
+        
+        // Name field (varies by type)
+        if (type === 'teams') {
+            html += `<div class="name">${item.team_name}</div>`;
+        } else if (type === 'offices') {
+            html += `<div class="name">${item.office_name}</div>`;
+        } else if (type === 'fax') {
+            html += `<div class="name">${item.destination}</div>`;
+        } else {
+            html += `<div class="name">${item.full_name}</div>`;
+        }
+        
+        // Contact info
+        if (item.direct_phone) html += `<div class="info">Direct: ${item.direct_phone}</div>`;
+        if (item.cell_phone) html += `<div class="info">Cell: ${item.cell_phone}</div>`;
+        if (item.main_phone) html += `<div class="info">Phone: ${item.main_phone}</div>`;
+        if (item.team_phone) html += `<div class="info">Phone: ${item.team_phone}</div>`;
+        if (item.fax_number) html += `<div class="info">Fax: ${item.fax_number}</div>`;
+        if (item.email) html += `<div class="info">Email: <a href="mailto:${item.email}">${item.email}</a></div>`;
+        if (item.team_email) html += `<div class="info">Email: <a href="mailto:${item.team_email}">${item.team_email}</a></div>`;
+        if (item.location) html += `<div class="info">Location: ${item.location}</div>`;
+        if (item.address) html += `<div class="info">Address: ${item.address}</div>`;
+        
+        // Social media (for agents, affiliated, yacht)
+        if (['agents', 'affiliated', 'yacht'].includes(type)) {
+            html += '<div class="social">';
+            if (item.approved_facebook) html += `<a href="${item.facebook_url}" target="_blank" class="facebook" title="Facebook"><i class="fab fa-facebook"></i></a>`;
+            if (item.approved_linkedin) html += `<a href="${item.linkedin_url}" target="_blank" class="linkedin" title="LinkedIn"><i class="fab fa-linkedin"></i></a>`;
+            if (item.approved_goto) html += `<a href="${item.goto_url}" target="_blank" class="goto" title="GoTo"><i class="fas fa-external-link-alt"></i></a>`;
+            html += '</div>';
+        }
+        
+        // Admin controls
+        html += `
             <div class="admin-controls">
-                <button class="edit-btn" data-type="agents" data-id="${agent.id}">Edit</button>
-                <button class="delete-btn" data-type="agents" data-id="${agent.id}">Delete</button>
+                <button class="edit-btn" data-type="${type}" data-id="${item.id}">Edit</button>
+                <button class="delete-btn" data-type="${type}" data-id="${item.id}">Delete</button>
             </div>
-        </div>
-    `).join('');
-
-    // Display Affiliated Businesses
-    document.getElementById('affiliated-grid').innerHTML = data.affiliatedBusinesses.map(business => `
-        <div class="card">
-            <div class="name">${business.full_name}</div>
-            ${business.direct_phone ? `<div class="info">Direct: ${business.direct_phone}</div>` : ''}
-            ${business.cell_phone ? `<div class="info">Cell: ${business.cell_phone}</div>` : ''}
-            ${business.email ? `<div class="info">Email: <a href="mailto:${business.email}">${business.email}</a></div>` : ''}
-            ${business.location ? `<div class="info">Location: ${business.location}</div>` : ''}
-            <div class="social">
-                ${business.approved_facebook ? `<a href="${business.facebook_url}" target="_blank" class="facebook" title="Facebook"><i class="fab fa-facebook"></i></a>` : ''}
-                ${business.approved_linkedin ? `<a href="${business.linkedin_url}" target="_blank" class="linkedin" title="LinkedIn"><i class="fab fa-linkedin"></i></a>` : ''}
-                ${business.approved_goto ? `<a href="${business.goto_url}" target="_blank" class="goto" title="GoTo"><i class="fas fa-external-link-alt"></i></a>` : ''}
-            </div>
-            <div class="admin-controls">
-                <button class="edit-btn" data-type="affiliated" data-id="${business.id}">Edit</button>
-                <button class="delete-btn" data-type="affiliated" data-id="${business.id}">Delete</button>
-            </div>
-        </div>
-    `).join('');
-
-    // Display Yacht Brokerage
-    document.getElementById('yacht-grid').innerHTML = data.yachtBrokerage.map(broker => `
-        <div class="card">
-            <div class="name">${broker.full_name}</div>
-            ${broker.direct_phone ? `<div class="info">Direct: ${broker.direct_phone}</div>` : ''}
-            ${broker.cell_phone ? `<div class="info">Cell: ${broker.cell_phone}</div>` : ''}
-            ${broker.email ? `<div class="info">Email: <a href="mailto:${broker.email}">${broker.email}</a></div>` : ''}
-            ${broker.location ? `<div class="info">Location: ${broker.location}</div>` : ''}
-            <div class="social">
-                ${broker.approved_facebook ? `<a href="${broker.facebook_url}" target="_blank" class="facebook" title="Facebook"><i class="fab fa-facebook"></i></a>` : ''}
-                ${broker.approved_linkedin ? `<a href="${broker.linkedin_url}" target="_blank" class="linkedin" title="LinkedIn"><i class="fab fa-linkedin"></i></a>` : ''}
-                ${broker.approved_goto ? `<a href="${broker.goto_url}" target="_blank" class="goto" title="GoTo"><i class="fas fa-external-link-alt"></i></a>` : ''}
-            </div>
-            <div class="admin-controls">
-                <button class="edit-btn" data-type="yacht" data-id="${broker.id}">Edit</button>
-                <button class="delete-btn" data-type="yacht" data-id="${broker.id}">Delete</button>
-            </div>
-        </div>
-    `).join('');
-
-    // Display Teams
-    document.getElementById('teams-grid').innerHTML = data.teams.map(team => `
-        <div class="card">
-            <div class="name">${team.team_name}</div>
-            ${team.team_email ? `<div class="info">Email: <a href="mailto:${team.team_email}">${team.team_email}</a></div>` : ''}
-            ${team.team_phone ? `<div class="info">Phone: ${team.team_phone}</div>` : ''}
-            <div class="admin-controls">
-                <button class="edit-btn" data-type="teams" data-id="${team.id}">Edit</button>
-                <button class="delete-btn" data-type="teams" data-id="${team.id}">Delete</button>
-            </div>
-        </div>
-    `).join('');
-
-    // Display Offices
-    document.getElementById('offices-grid').innerHTML = data.offices.map(office => `
-        <div class="card">
-            <div class="name">${office.office_name}</div>
-            ${office.main_phone ? `<div class="info">Phone: ${office.main_phone}</div>` : ''}
-            ${office.fax_number ? `<div class="info">Fax: ${office.fax_number}</div>` : ''}
-            ${office.address ? `<div class="info">Address: ${office.address}</div>` : ''}
-            <div class="admin-controls">
-                <button class="edit-btn" data-type="offices" data-id="${office.id}">Edit</button>
-                <button class="delete-btn" data-type="offices" data-id="${office.id}">Delete</button>
-            </div>
-        </div>
-    `).join('');
-
-    // Display Fax to Email
-    document.getElementById('fax-grid').innerHTML = data.faxToEmails.map(fax => `
-        <div class="card">
-            <div class="name">${fax.destination}</div>
-            ${fax.fax_number ? `<div class="info">Fax: ${fax.fax_number}</div>` : ''}
-            <div class="admin-controls">
-                <button class="edit-btn" data-type="fax" data-id="${fax.id}">Edit</button>
-                <button class="delete-btn" data-type="fax" data-id="${fax.id}">Delete</button>
-            </div>
-        </div>
-    `).join('');
-
-    // Add event listeners for edit and delete buttons
-    document.querySelectorAll('.edit-btn').forEach(button => {
+        </div>`;
+        
+        return html;
+    }).join('');
+    
+    // Add event listeners
+    gridElement.querySelectorAll('.edit-btn').forEach(button => {
         button.addEventListener('click', () => {
-            const type = button.dataset.type;
-            const id = button.dataset.id;
-            showEditModal(type, id);
+            showEditModal(button.dataset.type, button.dataset.id);
         });
     });
-
-    document.querySelectorAll('.delete-btn').forEach(button => {
+    
+    gridElement.querySelectorAll('.delete-btn').forEach(button => {
         button.addEventListener('click', () => {
-            const type = button.dataset.type;
-            const id = button.dataset.id;
-            deleteItem(type, id);
+            deleteItem(button.dataset.type, button.dataset.id);
         });
     });
 }
@@ -191,129 +143,148 @@ function showAddModal(type) {
     document.getElementById('itemId').value = '';
     document.getElementById('itemType').value = type;
     
-    const formFields = document.getElementById('formFields');
-    formFields.innerHTML = formTemplates[type].map(field => `
-        <div class="form-group">
-            <label for="${field.name}">${field.label}</label>
+    const form = document.getElementById('itemForm');
+    form.innerHTML = '';
+    
+    formTemplates[type].forEach(field => {
+        const div = document.createElement('div');
+        div.className = 'form-group';
+        div.innerHTML = `
+            <label for="${field.name}">${field.label}${field.required ? ' *' : ''}:</label>
             <input type="${field.type}" id="${field.name}" name="${field.name}" ${field.required ? 'required' : ''}>
-        </div>
-    `).join('');
-
-    document.getElementById('editModal').style.display = 'block';
+        `;
+        form.appendChild(div);
+    });
+    
+    document.getElementById('modal').style.display = 'block';
 }
 
 async function showEditModal(type, id) {
     try {
-        const response = await fetch(`/api/agent-directory/api/directory/${type}/${id}`, {
-            credentials: 'include',
-            headers: {
-                'X-API-Key': '6ec14ed9-7485-492a-9393-b3df17967945'
-            }
+        const response = await fetch(`/api/directory/${type}/${id}`, {
+            method: 'GET',
+            credentials: 'same-origin'
         });
+        
         if (!response.ok) throw new Error('Failed to fetch item');
+        
         const item = await response.json();
-
+        
         document.getElementById('modalTitle').textContent = `Edit ${type.charAt(0).toUpperCase() + type.slice(1)}`;
         document.getElementById('itemId').value = id;
         document.getElementById('itemType').value = type;
         
-        const formFields = document.getElementById('formFields');
-        formFields.innerHTML = formTemplates[type].map(field => `
-            <div class="form-group">
-                <label for="${field.name}">${field.label}</label>
-                <input type="${field.type}" id="${field.name}" name="${field.name}" 
-                       value="${item[field.name] || ''}" ${field.required ? 'required' : ''}>
-            </div>
-        `).join('');
-
-        document.getElementById('editModal').style.display = 'block';
+        const form = document.getElementById('itemForm');
+        form.innerHTML = '';
+        
+        formTemplates[type].forEach(field => {
+            const div = document.createElement('div');
+            div.className = 'form-group';
+            div.innerHTML = `
+                <label for="${field.name}">${field.label}${field.required ? ' *' : ''}:</label>
+                <input type="${field.type}" id="${field.name}" name="${field.name}" value="${item[field.name] || ''}" ${field.required ? 'required' : ''}>
+            `;
+            form.appendChild(div);
+        });
+        
+        document.getElementById('modal').style.display = 'block';
     } catch (error) {
-        console.error('Error loading item:', error);
-        alert('Failed to load item for editing');
+        console.error('Error fetching item:', error);
+        alert('Error loading item for editing');
     }
 }
 
 function hideModal() {
-    document.getElementById('editModal').style.display = 'none';
+    document.getElementById('modal').style.display = 'none';
 }
 
 async function saveItem(event) {
     event.preventDefault();
+    
     const type = document.getElementById('itemType').value;
     const id = document.getElementById('itemId').value;
     const formData = new FormData(event.target);
     const data = Object.fromEntries(formData.entries());
-
+    
     try {
-        const url = id ? `/api/agent-directory/api/directory/${type}/${id}` : `/api/agent-directory/api/directory/${type}`;
+        const url = id ? `/api/directory/${type}/${id}` : `/api/directory/${type}`;
         const method = id ? 'PUT' : 'POST';
         
         const response = await fetch(url, {
-            method,
-            credentials: 'include',
+            method: method,
             headers: {
-                'Content-Type': 'application/json',
-                'X-API-Key': '6ec14ed9-7485-492a-9393-b3df17967945'
+                'Content-Type': 'application/json'
             },
+            credentials: 'same-origin',
             body: JSON.stringify(data)
         });
-
-        if (!response.ok) throw new Error('Failed to save item');
+        
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
         
         hideModal();
-        loadDirectoryData(); // Refresh the data
+        loadDirectoryData();
+        
     } catch (error) {
         console.error('Error saving item:', error);
-        alert('Failed to save item');
+        alert('Error saving item. Please try again.');
     }
 }
 
 async function deleteItem(type, id) {
-    if (!confirm('Are you sure you want to delete this item?')) return;
-
+    if (!confirm('Are you sure you want to delete this item?')) {
+        return;
+    }
+    
     try {
-        const response = await fetch(`/api/agent-directory/api/directory/${type}/${id}`, {
+        const response = await fetch(`/api/directory/${type}/${id}`, {
             method: 'DELETE',
-            credentials: 'include',
-            headers: {
-                'X-API-Key': '6ec14ed9-7485-492a-9393-b3df17967945'
-            }
+            credentials: 'same-origin'
         });
-
-        if (!response.ok) throw new Error('Failed to delete item');
         
-        loadDirectoryData(); // Refresh the data
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
+        loadDirectoryData();
+        
     } catch (error) {
         console.error('Error deleting item:', error);
-        alert('Failed to delete item');
+        alert('Error deleting item. Please try again.');
     }
 }
 
 function logout() {
-    fetch('/logout', { method: 'POST' })
-        .then(() => window.location.href = '/login')
-        .catch(error => console.error('Logout error:', error));
+    fetch('/logout', {
+        method: 'POST',
+        credentials: 'same-origin'
+    }).then(() => {
+        window.location.href = '/login';
+    });
 }
 
-// Initialize the page
-document.addEventListener('DOMContentLoaded', () => {
+// Initialize when page loads
+document.addEventListener('DOMContentLoaded', function() {
+    loadDirectoryData();
+    
     // Add event listeners for add buttons
     document.querySelectorAll('.add-btn').forEach(button => {
         button.addEventListener('click', () => {
-            const type = button.dataset.type;
-            showAddModal(type);
+            showAddModal(button.dataset.type);
         });
     });
-
-    // Add event listener for logout button
-    document.getElementById('logoutBtn').addEventListener('click', logout);
-
-    // Add event listener for cancel button
+    
+    // Modal event listeners
+    document.getElementById('itemForm').addEventListener('submit', saveItem);
+    document.querySelector('.close').addEventListener('click', hideModal);
     document.getElementById('cancelBtn').addEventListener('click', hideModal);
-
-    // Add event listener for form submission
-    document.getElementById('editForm').addEventListener('submit', saveItem);
-
-    // Load initial data
-    loadDirectoryData();
+    
+    // Close modal when clicking outside
+    window.addEventListener('click', (event) => {
+        const modal = document.getElementById('modal');
+        if (event.target === modal) {
+            hideModal();
+        }
+    });
 }); 

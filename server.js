@@ -17,10 +17,11 @@ app.use((req, res, next) => {
   // CSP that allows the necessary resources
   res.setHeader('Content-Security-Policy', 
     "default-src 'self'; " +
-    "style-src 'self' 'unsafe-inline'; " +
+    "style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; " +
     "img-src 'self' http://www.wfpccvideo.com https://cdn.jsdelivr.net data:; " +
     "script-src 'self'; " +
-    "connect-src 'self'"
+    "connect-src 'self'; " +
+    "font-src 'self' https://cdnjs.cloudflare.com"
   );
   
   next();

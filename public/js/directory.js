@@ -1,3 +1,23 @@
+// Fetch directory data from server
+async function fetchDirectoryData() {
+    try {
+        const response = await fetch('/api/directory', {
+            method: 'GET',
+            credentials: 'same-origin'
+        });
+        
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.error('Error fetching directory data:', error);
+        throw error;
+    }
+}
+
 // Fetch directory data when the page loads
 async function loadDirectoryData() {
     try {
