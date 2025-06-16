@@ -143,8 +143,8 @@ function showAddModal(type) {
     document.getElementById('itemId').value = '';
     document.getElementById('itemType').value = type;
     
-    const form = document.getElementById('itemForm');
-    form.innerHTML = '';
+    const formFields = document.getElementById('formFields');
+    formFields.innerHTML = '';
     
     formTemplates[type].forEach(field => {
         const div = document.createElement('div');
@@ -153,49 +153,90 @@ function showAddModal(type) {
             <label for="${field.name}">${field.label}${field.required ? ' *' : ''}:</label>
             <input type="${field.type}" id="${field.name}" name="${field.name}" ${field.required ? 'required' : ''}>
         `;
-        form.appendChild(div);
+        formFields.appendChild(div);
     });
     
-    document.getElementById('modal').style.display = 'block';
+    document.getElementById('editModal').style.display = 'block';
 }
 
 async function showEditModal(type, id) {
+    console.log('=== showEditModal DEBUG START ===');
+    console.log('Type:', type, 'ID:', id);
+    
     try {
+        console.log('Fetching item from API...');
         const response = await fetch(`/api/directory/${type}/${id}`, {
             method: 'GET',
             credentials: 'same-origin'
         });
         
+        console.log('API Response status:', response.status);
         if (!response.ok) throw new Error('Failed to fetch item');
         
         const item = await response.json();
+        console.log('Fetched item:', item);
         
-        document.getElementById('modalTitle').textContent = `Edit ${type.charAt(0).toUpperCase() + type.slice(1)}`;
-        document.getElementById('itemId').value = id;
-        document.getElementById('itemType').value = type;
+        // Check if DOM elements exist
+        const modalTitle = document.getElementById('modalTitle');
+        const itemIdField = document.getElementById('itemId');
+        const itemTypeField = document.getElementById('itemType');
+        const formFields = document.getElementById('formFields');
+        const editModal = document.getElementById('editModal');
         
-        const form = document.getElementById('itemForm');
-        form.innerHTML = '';
+        console.log('DOM Elements Check:');
+        console.log('- modalTitle:', modalTitle ? 'EXISTS' : 'NULL');
+        console.log('- itemId:', itemIdField ? 'EXISTS' : 'NULL');
+        console.log('- itemType:', itemTypeField ? 'EXISTS' : 'NULL');
+        console.log('- formFields:', formFields ? 'EXISTS' : 'NULL');
+        console.log('- editModal:', editModal ? 'EXISTS' : 'NULL');
         
-        formTemplates[type].forEach(field => {
+        if (!formFields) {
+            console.error('CRITICAL: formFields element not found!');
+            alert('Critical error: Form container not found. Please refresh the page.');
+            return;
+        }
+        
+        if (modalTitle) modalTitle.textContent = `Edit ${type.charAt(0).toUpperCase() + type.slice(1)}`;
+        if (itemIdField) itemIdField.value = id;
+        if (itemTypeField) itemTypeField.value = type;
+        
+        console.log('Clearing form fields...');
+        formFields.innerHTML = '';
+        
+        console.log('Form template for', type, ':', formTemplates[type]);
+        
+        formTemplates[type].forEach((field, index) => {
+            console.log(`Creating field ${index + 1}:`, field.name, '=', item[field.name]);
             const div = document.createElement('div');
             div.className = 'form-group';
             div.innerHTML = `
                 <label for="${field.name}">${field.label}${field.required ? ' *' : ''}:</label>
                 <input type="${field.type}" id="${field.name}" name="${field.name}" value="${item[field.name] || ''}" ${field.required ? 'required' : ''}>
             `;
-            form.appendChild(div);
+            formFields.appendChild(div);
         });
         
-        document.getElementById('modal').style.display = 'block';
+        console.log('Form fields populated. Showing modal...');
+        if (editModal) {
+            editModal.style.display = 'block';
+            console.log('Modal displayed successfully');
+        } else {
+            console.error('CRITICAL: editModal element not found!');
+            alert('Critical error: Modal not found. Please refresh the page.');
+        }
+        
     } catch (error) {
-        console.error('Error fetching item:', error);
-        alert('Error loading item for editing');
+        console.error('=== ERROR in showEditModal ===');
+        console.error('Error details:', error);
+        console.error('Stack trace:', error.stack);
+        alert('Error loading item for editing: ' + error.message);
     }
+    
+    console.log('=== showEditModal DEBUG END ===');
 }
 
 function hideModal() {
-    document.getElementById('modal').style.display = 'none';
+    document.getElementById('editModal').style.display = 'none';
 }
 
 async function saveItem(event) {
@@ -266,25 +307,74 @@ function logout() {
 
 // Initialize when page loads
 document.addEventListener('DOMContentLoaded', function() {
+    console.log('=== DOMContentLoaded DEBUG START ===');
+    
+    console.log('Loading directory data...');
     loadDirectoryData();
     
     // Add event listeners for add buttons
-    document.querySelectorAll('.add-btn').forEach(button => {
+    console.log('Setting up add button listeners...');
+    const addButtons = document.querySelectorAll('.add-btn');
+    console.log('Found', addButtons.length, 'add buttons');
+    addButtons.forEach(button => {
         button.addEventListener('click', () => {
             showAddModal(button.dataset.type);
         });
     });
     
     // Modal event listeners
-    document.getElementById('itemForm').addEventListener('submit', saveItem);
-    document.querySelector('.close').addEventListener('click', hideModal);
-    document.getElementById('cancelBtn').addEventListener('click', hideModal);
+    console.log('Setting up modal event listeners...');
+    
+    const editForm = document.getElementById('editForm');
+    const closeBtn = document.querySelector('.close');
+    const cancelBtn = document.getElementById('cancelBtn');
+    const logoutBtn = document.getElementById('logoutBtn');
+    const editModal = document.getElementById('editModal');
+    
+    console.log('Modal DOM Elements Check:');
+    console.log('- editForm:', editForm ? 'EXISTS' : 'NULL');
+    console.log('- closeBtn:', closeBtn ? 'EXISTS' : 'NULL');
+    console.log('- cancelBtn:', cancelBtn ? 'EXISTS' : 'NULL');
+    console.log('- logoutBtn:', logoutBtn ? 'EXISTS' : 'NULL');
+    console.log('- editModal:', editModal ? 'EXISTS' : 'NULL');
+    
+    if (editForm) {
+        editForm.addEventListener('submit', saveItem);
+        console.log('✓ Edit form submit listener added');
+    } else {
+        console.error('✗ editForm not found - cannot add submit listener');
+    }
+    
+    if (closeBtn) {
+        closeBtn.addEventListener('click', hideModal);
+        console.log('✓ Close button listener added');
+    } else {
+        console.error('✗ Close button not found - cannot add click listener');
+    }
+    
+    if (cancelBtn) {
+        cancelBtn.addEventListener('click', hideModal);
+        console.log('✓ Cancel button listener added');
+    } else {
+        console.error('✗ Cancel button not found - cannot add click listener');
+    }
+    
+    // Logout button event listener
+    if (logoutBtn) {
+        logoutBtn.addEventListener('click', logout);
+        console.log('✓ Logout button listener added');
+    } else {
+        console.log('ℹ Logout button not found (this may be normal)');
+    }
     
     // Close modal when clicking outside
+    console.log('Setting up modal outside click listener...');
     window.addEventListener('click', (event) => {
-        const modal = document.getElementById('modal');
-        if (event.target === modal) {
+        if (editModal && event.target === editModal) {
             hideModal();
         }
     });
+    console.log('✓ Modal outside click listener added');
+    
+    console.log('=== DOMContentLoaded DEBUG END ===');
 }); 
