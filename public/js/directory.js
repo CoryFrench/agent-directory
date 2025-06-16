@@ -41,9 +41,9 @@ function displayDirectoryData(data) {
             <td class="email-cell">${agent.email ? `<a href="mailto:${agent.email}">${agent.email}</a>` : ''}</td>
             <td>${agent.location || ''}</td>
             <td class="contact-links">
-                ${agent.approved_facebook ? `<a href="${agent.facebook_url}" target="_blank" class="facebook" title="Facebook"><i class="fab fa-facebook"></i></a>` : ''}
-                ${agent.approved_linkedin ? `<a href="${agent.linkedin_url}" target="_blank" class="linkedin" title="LinkedIn"><i class="fab fa-linkedin"></i></a>` : ''}
-                ${agent.approved_goto ? `<a href="${agent.goto_url}" target="_blank" class="goto" title="GoTo"><i class="fas fa-external-link-alt"></i></a>` : ''}
+                ${agent.facebook_url ? `<a href="${agent.facebook_url}" target="_blank" class="facebook" title="Facebook"><i class="fab fa-facebook"></i></a>` : ''}
+                ${agent.linkedin_url ? `<a href="${agent.linkedin_url}" target="_blank" class="linkedin" title="LinkedIn"><i class="fab fa-linkedin"></i></a>` : ''}
+                ${agent.goto_url ? `<a href="${agent.goto_url}" target="_blank" class="goto" title="GoTo"><i class="fas fa-external-link-alt"></i></a>` : ''}
             </td>
         </tr>
     `).join('');
@@ -88,9 +88,9 @@ function displayDirectoryData(data) {
             <td class="email-cell">${business.email ? `<a href="mailto:${business.email}">${business.email}</a>` : ''}</td>
             <td>${business.location || ''}</td>
             <td class="contact-links">
-                ${business.approved_facebook ? `<a href="${business.facebook_url}" target="_blank" class="facebook" title="Facebook"><i class="fab fa-facebook"></i></a>` : ''}
-                ${business.approved_linkedin ? `<a href="${business.linkedin_url}" target="_blank" class="linkedin" title="LinkedIn"><i class="fab fa-linkedin"></i></a>` : ''}
-                ${business.approved_goto ? `<a href="${business.goto_url}" target="_blank" class="goto" title="GoTo"><i class="fas fa-external-link-alt"></i></a>` : ''}
+                ${business.facebook_url ? `<a href="${business.facebook_url}" target="_blank" class="facebook" title="Facebook"><i class="fab fa-facebook"></i></a>` : ''}
+                ${business.linkedin_url ? `<a href="${business.linkedin_url}" target="_blank" class="linkedin" title="LinkedIn"><i class="fab fa-linkedin"></i></a>` : ''}
+                ${business.goto_url ? `<a href="${business.goto_url}" target="_blank" class="goto" title="GoTo"><i class="fas fa-external-link-alt"></i></a>` : ''}
             </td>
         </tr>
     `).join('');
@@ -105,9 +105,9 @@ function displayDirectoryData(data) {
             <td class="email-cell">${broker.email ? `<a href="mailto:${broker.email}">${broker.email}</a>` : ''}</td>
             <td>${broker.location || ''}</td>
             <td class="contact-links">
-                ${broker.approved_facebook ? `<a href="${broker.facebook_url}" target="_blank" class="facebook" title="Facebook"><i class="fab fa-facebook"></i></a>` : ''}
-                ${broker.approved_linkedin ? `<a href="${broker.linkedin_url}" target="_blank" class="linkedin" title="LinkedIn"><i class="fab fa-linkedin"></i></a>` : ''}
-                ${broker.approved_goto ? `<a href="${broker.goto_url}" target="_blank" class="goto" title="GoTo"><i class="fas fa-external-link-alt"></i></a>` : ''}
+                ${broker.facebook_url ? `<a href="${broker.facebook_url}" target="_blank" class="facebook" title="Facebook"><i class="fab fa-facebook"></i></a>` : ''}
+                ${broker.linkedin_url ? `<a href="${broker.linkedin_url}" target="_blank" class="linkedin" title="LinkedIn"><i class="fab fa-linkedin"></i></a>` : ''}
+                ${broker.goto_url ? `<a href="${broker.goto_url}" target="_blank" class="goto" title="GoTo"><i class="fas fa-external-link-alt"></i></a>` : ''}
             </td>
         </tr>
     `).join('');
