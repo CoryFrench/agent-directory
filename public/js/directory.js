@@ -18,19 +18,10 @@ async function fetchDirectoryData() {
     }
 }
 
-// Fetch directory data when the page loads
+// Load directory data when the page loads
 async function loadDirectoryData() {
     try {
-        const response = await fetch('/api/agent-directory/api/directory', {
-            credentials: 'include',
-            headers: {
-                'X-API-Key': '6ec14ed9-7485-492a-9393-b3df17967945'
-            }
-        });
-        if (!response.ok) {
-            throw new Error('Failed to fetch directory data');
-        }
-        const data = await response.json();
+        const data = await fetchDirectoryData();
         displayDirectoryData(data);
     } catch (error) {
         console.error('Error loading directory data:', error);
