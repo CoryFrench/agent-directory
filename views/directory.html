@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Waterfront Properties - Directory</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -88,10 +89,21 @@
             color: #0066cc;
             text-decoration: none;
             margin-right: 8px;
-            font-size: 12px;
+            font-size: 16px;
+            display: inline-block;
+            transition: color 0.3s ease;
         }
         .contact-links a:hover {
-            text-decoration: underline;
+            transform: scale(1.1);
+        }
+        .contact-links a.facebook:hover {
+            color: #1877f2;
+        }
+        .contact-links a.linkedin:hover {
+            color: #0077b5;
+        }
+        .contact-links a.goto:hover {
+            color: #ff6b35;
         }
         .header-buttons {
             position: absolute;

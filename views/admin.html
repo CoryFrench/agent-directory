@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:;">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; img-src 'self' data:; font-src 'self' https://cdnjs.cloudflare.com;">
     <title>Waterfront Properties - Directory Admin</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="/css/admin.css">
     <style>
         /* Reuse existing styles */
@@ -76,9 +77,21 @@
             margin-right: 10px;
             color: #0066cc;
             text-decoration: none;
+            font-size: 16px;
+            display: inline-block;
+            transition: color 0.3s ease;
         }
         .social a:hover {
-            text-decoration: underline;
+            transform: scale(1.1);
+        }
+        .social a.facebook:hover {
+            color: #1877f2;
+        }
+        .social a.linkedin:hover {
+            color: #0077b5;
+        }
+        .social a.goto:hover {
+            color: #ff6b35;
         }
         .header-buttons {
             position: absolute;
