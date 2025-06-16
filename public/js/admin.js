@@ -5,30 +5,21 @@ const formTemplates = {
         { name: 'direct_phone', label: 'Direct Phone', type: 'tel' },
         { name: 'cell_phone', label: 'Cell Phone', type: 'tel' },
         { name: 'email', label: 'Email', type: 'email' },
-        { name: 'location', label: 'Location', type: 'text' },
-        { name: 'facebook_url', label: 'Facebook URL', type: 'url' },
-        { name: 'linkedin_url', label: 'LinkedIn URL', type: 'url' },
-        { name: 'goto_url', label: 'GoTo URL', type: 'url' }
+        { name: 'location', label: 'Location', type: 'text' }
     ],
     affiliated: [
         { name: 'full_name', label: 'Business Name', type: 'text', required: true },
         { name: 'direct_phone', label: 'Direct Phone', type: 'tel' },
         { name: 'cell_phone', label: 'Cell Phone', type: 'tel' },
         { name: 'email', label: 'Email', type: 'email' },
-        { name: 'location', label: 'Location', type: 'text' },
-        { name: 'facebook_url', label: 'Facebook URL', type: 'url' },
-        { name: 'linkedin_url', label: 'LinkedIn URL', type: 'url' },
-        { name: 'goto_url', label: 'GoTo URL', type: 'url' }
+        { name: 'location', label: 'Location', type: 'text' }
     ],
     yacht: [
         { name: 'full_name', label: 'Full Name', type: 'text', required: true },
         { name: 'direct_phone', label: 'Direct Phone', type: 'tel' },
         { name: 'cell_phone', label: 'Cell Phone', type: 'tel' },
         { name: 'email', label: 'Email', type: 'email' },
-        { name: 'location', label: 'Location', type: 'text' },
-        { name: 'facebook_url', label: 'Facebook URL', type: 'url' },
-        { name: 'linkedin_url', label: 'LinkedIn URL', type: 'url' },
-        { name: 'goto_url', label: 'GoTo URL', type: 'url' }
+        { name: 'location', label: 'Location', type: 'text' }
     ],
     teams: [
         { name: 'team_name', label: 'Team Name', type: 'text', required: true },
@@ -104,14 +95,7 @@ function populateSection(type, items) {
         if (item.location) html += `<div class="info">Location: ${item.location}</div>`;
         if (item.address) html += `<div class="info">Address: ${item.address}</div>`;
         
-        // Social media (for agents, affiliated, yacht)
-        if (['agents', 'affiliated', 'yacht'].includes(type)) {
-            html += '<div class="social">';
-            if (item.approved_facebook) html += `<a href="${item.facebook_url}" target="_blank" class="facebook" title="Facebook"><i class="fab fa-facebook"></i></a>`;
-            if (item.approved_linkedin) html += `<a href="${item.linkedin_url}" target="_blank" class="linkedin" title="LinkedIn"><i class="fab fa-linkedin"></i></a>`;
-            if (item.approved_goto) html += `<a href="${item.goto_url}" target="_blank" class="goto" title="GoTo"><i class="fas fa-external-link-alt"></i></a>`;
-            html += '</div>';
-        }
+
         
         // Admin controls
         html += `
